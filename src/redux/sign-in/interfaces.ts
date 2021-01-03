@@ -9,6 +9,10 @@ export type ISignInAccountState  = {
   error: string|null
   retry: number
 }
+export interface ISignInAccountParams {
+  username: string
+  password: string
+}
 export type IAccountData = {
   _id: string
   firstName: string

@@ -1,2 +1,3 @@
 import * as actionTypes from './action-types'
-export const signInAccount = () => ({type: actionTypes.ACCOUNT_SIGN_IN_PENDING})
+import { ISignInAccountParams } from './interfaces'
+export const signInAccount = (params: ISignInAccountParams) => ({type: actionTypes.ACCOUNT_SIGN_IN_PENDING, params: params})

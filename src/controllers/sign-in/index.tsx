@@ -12,24 +12,25 @@ import {
   Button,
   TextField
 } from '@material-ui/core'
+import { ISignInAccountParams } from '../../redux/sign-in/interfaces'
+import { DEFAULT_REDUCER_STATUSES } from '../../utils/constants'
 // import { IFetchOrderState } from '../../redux/sign-in/interfaces'
 // import { IPaginationResponse } from '../../utils/interfaces'
-interface IComponentState {
-  username: string
-  password: string
+
+interface IComponentState extends ISignInAccountParams {
 }
 interface HomeProps {
   order?: any
 }
 
-interface  IMapStateToProps {
-  // orderList: IFetchOrderState
+interface  IMapStateToProps extends AppState {
+// interface  IMapStateToProps extends Pick<AppState, 'authorizedAccount'>{
 }
 interface IMapDispatchToProps {
-  signInAccount: () => void
+  signInAccount: (params: ISignInAccountParams) => void
 }
-type IProps = IMapDispatchToProps
-// type IProps = IMapDispatchToProps & IMapStateToProps
+// type IProps = IMapDispatchToProps
+type IProps = IMapDispatchToProps & IMapStateToProps
 class ContainerComponent extends React.Component<IProps, IComponentState> {
   public state = {
     username: '',
@@ -41,22 +42,25 @@ class ContainerComponent extends React.Component<IProps, IComponentState> {
       this.handleUsernameOnChange = this.handleUsernameOnChange.bind(this)
       this.handlePasswordOnChange = this.handlePasswordOnChange.bind(this)
   }
-  protected handleFetchOrderListState () {
+  protected handleSignInAccountResponse ({authorizedAccount}: IProps) {
   // protected handleFetchOrderListState ({}: IProps) {
-    // if (this.props.orderList.status !== orderList.status) {
-    //   if (orderList.status === DEFAULT_REDUCER_STATUSES.FETCHED) {
-    //     console.log(' >>. fetched data ', orderList)
-    //     this.setState({orders: orderList.data})
-    //   } else if (orderList.status === DEFAULT_REDUCER_STATUSES.FETCHING) {
-    //     console.log(' >>. fetching order list...')
-    //   } else if (orderList.status === DEFAULT_REDUCER_STATUSES.FAILED) {
-    //     console.log(' >> failed to fetch order list. => ', orderList)
-    //   }
-    // }
+    if (this.props.authorizedAccount.status !== authorizedAccount.status) {
+      if (authorizedAccount.status === DEFAULT_REDUCER_STATUSES.FETCHED) {
+        console.log(' >>. fetched data ', authorizedAccount)
+        // this.setState({orders: authorizedAccount.data})
+      } else if (authorizedAccount.status === DEFAULT_REDUCER_STATUSES.FETCHING) {
+        console.log(' >>. fetching order list...')
+      } else if (authorizedAccount.status === DEFAULT_REDUCER_STATUSES.FAILED) {
+        console.log(' >> failed to fetch order list. => ', authorizedAccount)
+      }
+    }
   }
   protected handleSignInButton = () => {
     const {password, username} = this.state
-    this.props.signInAccount()
+    this.props.signInAccount({
+      password,
+      username
+    })
     // console.log('username :>> ', username);
     // console.log('password :>> ', password);
   }
@@ -71,6 +75,7 @@ class ContainerComponent extends React.Component<IProps, IComponentState> {
   }
   public componentWillReceiveProps (newProps: IProps) {
     // this.handleFetchOrderListState(newProps)
+    this.handleSignInAccountResponse(newProps)
   }
   public render () {
     const {password, username} = this.state
