@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux'
-import {orderListReducer} from './orders/reducer'
-import { IFetchOrderState } from './orders/interfaces'
+import {signInAccountReducer} from './sign-in/reducer'
+// import { IFetchOrderState } from './sign-in/interfaces'
 // import reducers here
 export default combineReducers({
-    orderList: orderListReducer
+    authorizedAccount: signInAccountReducer
 //   toast
 // implement here
 })

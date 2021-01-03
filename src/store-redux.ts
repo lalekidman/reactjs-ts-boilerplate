@@ -3,7 +3,7 @@ import rootReducers from './redux/reducers'
 
 import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
 import rootSaga from './redux/sagas'
-import {IFetchOrderAction} from './redux/orders/interfaces'
+// import {IFetchOrderAction} from './redux/sign-in/interfaces'
 
 const sagaMiddleware = createSagaMiddleware()
 
