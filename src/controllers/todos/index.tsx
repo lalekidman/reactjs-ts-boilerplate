@@ -6,7 +6,7 @@ import { AppState } from '../../store-redux'
 
 import {
   Button,
-  Alert
+  Alert, Form
 } from 'react-bootstrap'
 // import {
 //   Button,
@@ -66,13 +66,14 @@ class ContainerComponent extends React.Component<IProps, IComponentState> {
     return (
       <div>
         <br />
+
         {/* <TextField type='text' value={newTodo} placeholder = "Enter Todo's" onChange={this.newTodos}/> */}
-        <Alert variant='primary'>This is a sample</Alert>
-        <Button variant='primary'>Button</Button>
-        {/* <Button 
-          color = 'primary'
-          variant="contained"
-          onClick={this.handleAddTodosButton}>Add Todo</Button> */}
+        <Form.Control
+          placeholder='New Todo'
+          />
+        <Button 
+          variant="primary"
+          onClick={this.handleAddTodosButton}>Add Todo</Button>
       </div>
     )
   }
