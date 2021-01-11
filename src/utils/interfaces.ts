@@ -10,3 +10,9 @@ export type IGeneralReducer<T> = {
     error?: any,
     type: keyof T
   }
+export type IGeneralReducerState<T> = {
+    data: T
+    status: IDEFAULT_REDUCER_STATUSES
+    error: string|null
+    retry: number
+  }

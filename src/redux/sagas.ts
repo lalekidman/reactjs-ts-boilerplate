@@ -1,9 +1,11 @@
 import {all} from 'redux-saga/effects'
-import OrderSaga from './todos/saga'
+import TodoSaga from './todos/saga'
+import SignInSaga from './sign-in/saga'
 // import all saga here
 export default function * () {
   yield all([
-    OrderSaga()
+    TodoSaga(),
+    SignInSaga()
     // put it here
   ])
 }

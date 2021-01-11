@@ -1,15 +1,28 @@
 import React from 'react'
 import Todos from './todos/index'
-// import {Switch, withRouter} from 'react-router-dom'
+import SignIn from './authentication/index'
+import {
+  Switch,
+  Route, 
+  BrowserRouter as Router} from 'react-router-dom'
 // import Toast from '../utils/Toast'
 // import {bindActionCreators} from 'redux'
 // import {connect} from 'react-redux'
 class Wrapper extends React.Component {
   render () {
     return (
-      <div>
-          <Todos />
-      </div>
+      <Router>
+        <div>
+            <Switch>
+              <Route path="/sign-in">
+                <SignIn />
+              </Route>
+              <Route path="/todos">
+                <Todos />
+              </Route>
+            </Switch>
+        </div>
+      </Router>
     )
   }
 }

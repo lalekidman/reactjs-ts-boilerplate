@@ -18,7 +18,7 @@ interface IComponentState {
   newTodo: string
 }
 
-interface  IMapStateToProps extends AppState {
+interface  IMapStateToProps extends Pick<AppState, 'addedTodo'> {
 }
 interface IMapDispatchToProps {
   addTodo: (data: ITodoData) => void
@@ -34,7 +34,7 @@ class ContainerComponent extends React.Component<IProps, IComponentState> {
       this.handleAddTodosButton = this.handleAddTodosButton.bind(this)
       this.newTodos = this.newTodos.bind(this)
   }
-  protected handleAddTodoResponse ({addedTodo}: IProps) {
+  protected handleAddTodoResponse ({addedTodo, }: IProps) {
   // protected handleFetchOrderListState ({}: IProps) {
     if (this.props.addedTodo.status !== addedTodo.status) {
       if (addedTodo.status === DEFAULT_REDUCER_STATUSES.FETCHED) {
@@ -70,6 +70,8 @@ class ContainerComponent extends React.Component<IProps, IComponentState> {
         {/* <TextField type='text' value={newTodo} placeholder = "Enter Todo's" onChange={this.newTodos}/> */}
         <Form.Control
           placeholder='New Todo'
+          value={newTodo}
+          onChange={this.newTodos}
           />
         <Button 
           variant="primary"
@@ -79,7 +81,9 @@ class ContainerComponent extends React.Component<IProps, IComponentState> {
   }
 }
 const mapStateToProps = ({addedTodo} : AppState, ownProps: any): IMapStateToProps => {
-  return {addedTodo}
+  return {
+    addedTodo
+  }
 }
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
