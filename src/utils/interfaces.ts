@@ -5,3 +5,8 @@ export interface IPaginationResponse {
     totalPages: number
     data: any[]
 }
+export type IGeneralReducer<T> = {
+    payload: any
+    error?: any,
+    type: keyof T
+  }

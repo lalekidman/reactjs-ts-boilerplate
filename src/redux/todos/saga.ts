@@ -1,23 +1,23 @@
 import {put, all, call, takeLatest} from 'redux-saga/effects'
 import * as actionTypes from './action-types'
-import {signInAccount} from './api'
-function * signInAccountWorker (data: any) {
+import {addTodo} from './api'
+function * addTodoWorker (data: any) {
   try {
-    const res = yield call(signInAccount as any, data)
+    const res = yield call(addTodo as any, data)
     yield put ({
-      type: actionTypes.ACCOUNT_SIGN_IN_SUCCEED,
+      type: actionTypes.ADD_TODO_SUCCEED,
       data: res
     })
   } catch (err) {
     yield put({
-      type: actionTypes.ACCOUNT_SIGN_IN_FAILED,
+      type: actionTypes.ADD_TODO_FAILED,
       error: err.message
     })
   }
 }
 export default function * () {
   yield all([
-      takeLatest(actionTypes.ACCOUNT_SIGN_IN_PENDING, signInAccountWorker),
+      takeLatest(actionTypes.ADD_TODO_PENDING, addTodoWorker),
     ])
   }
   

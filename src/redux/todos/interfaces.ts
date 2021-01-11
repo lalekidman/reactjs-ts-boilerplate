@@ -1,28 +1,20 @@
-import { IDEFAULT_REDUCER_STATUSES } from "../../utils/interfaces";
-import * as actionTypes from './action-types'
+import { IDEFAULT_REDUCER_STATUSES, IGeneralReducer } from "../../utils/interfaces";
+import * as ActionTypes from './action-types'
 export interface IFetchOrderListActions {
   type: string
 }
-export type ISignInAccountState  = {
-  data: IAccountData
+export type IAddTodoState  = {
+  data: ITodoEntity
   status: IDEFAULT_REDUCER_STATUSES
   error: string|null
   retry: number
 }
-export interface ISignInAccountParams {
-  username: string
-  password: string
+export interface ITodoData {
+  content: string
 }
-export type IAccountData = {
+export type ITodoEntity = ITodoData & {
   _id: string
-  firstName: string
-  lastName: string
-  middleName?: string
   updatedAt: number
   createdAt: number
 }
-export type ISignInAccountReducer = {
-  payload: any
-  error?: any,
-  type: keyof typeof actionTypes
-}
+export type IAddTodoReducer = IGeneralReducer<typeof ActionTypes>

@@ -1,5 +1,5 @@
 import React from 'react'
-import SignInComponent from './sign-in/index'
+import Todos from './todos/index'
 // import {Switch, withRouter} from 'react-router-dom'
 // import Toast from '../utils/Toast'
 // import {bindActionCreators} from 'redux'
@@ -8,7 +8,7 @@ class Wrapper extends React.Component {
   render () {
     return (
       <div>
-          <SignInComponent />
+          <Todos />
       </div>
     )
   }

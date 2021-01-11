@@ -1,12 +1,10 @@
 import * as actionTypes from './action-types'
-import { DEFAULT_REDUCER_STATUSES } from '../../utils/constants'
-import { ISignInAccountState, ISignInAccountReducer } from './interfaces'
-const initialState:ISignInAccountState = {
+import { DEFAULT_REDUCER_STATUSES, } from '../../utils/constants'
+import { IAddTodoReducer, IAddTodoState } from './interfaces'
+const initialState:IAddTodoState = {
   data: {
     _id: '',
-    firstName: '',
-    lastName: '',
-    middleName: '',
+    content: '',
     createdAt: 0,
     updatedAt: 0,
   },
@@ -14,22 +12,22 @@ const initialState:ISignInAccountState = {
   error: null,
   retry: 0
 }
-export const signInAccountReducer = (state = initialState, actions: ISignInAccountReducer): ISignInAccountState => {
+export const addTodoReducer = (state = initialState, actions: IAddTodoReducer): IAddTodoState => {
   const {type, payload, error} = actions
   switch (type) {
-    case actionTypes.ACCOUNT_SIGN_IN_PENDING:
+    case actionTypes.ADD_TODO_PENDING:
       return {
         ...state,
         status: DEFAULT_REDUCER_STATUSES.FETCHING,
         retry: state.retry + 1
       }
-    case actionTypes.ACCOUNT_SIGN_IN_SUCCEED:
+    case actionTypes.ADD_TODO_SUCCEED:
       return {
         ...state,
         data: payload,
         status: DEFAULT_REDUCER_STATUSES.FETCHED
       }
-    case actionTypes.ACCOUNT_SIGN_IN_FAILED:
+    case actionTypes.ADD_TODO_FAILED:
       return {
         ...state,
         error,

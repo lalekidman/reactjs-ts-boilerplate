@@ -1,11 +1,11 @@
 import Http from 'axios'
 import { HOST } from '../../utils/constants'
-import { IAccountData } from './interfaces'
-export const signInAccount = () => {
+import {  ITodoEntity} from './interfaces'
+export const addTodo = ({data}: any) => {
 	return Http({
 		method: 'POST',
-		url: `${HOST}/authentication/sign-in`,
+		url: `${HOST}/todos`,
 	}).then(resp => {
-		return resp.data as IAccountData
+		return resp.data as ITodoEntity
 	})
 }
