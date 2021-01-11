@@ -22,7 +22,7 @@ export type IAccountData = {
   createdAt: number
 }
 export type ISignInAccountReducer = {
-  data?: any
+  payload: any
   error?: any,
   type: keyof typeof actionTypes
 }

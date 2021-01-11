@@ -15,7 +15,7 @@ const initialState:ISignInAccountState = {
   retry: 0
 }
 export const signInAccountReducer = (state = initialState, actions: ISignInAccountReducer): ISignInAccountState => {
-  const {type, data, error} = actions
+  const {type, payload, error} = actions
   switch (type) {
     case actionTypes.ACCOUNT_SIGN_IN_PENDING:
       return {
@@ -26,7 +26,7 @@ export const signInAccountReducer = (state = initialState, actions: ISignInAccou
     case actionTypes.ACCOUNT_SIGN_IN_SUCCEED:
       return {
         ...state,
-        data,
+        data: payload,
         status: DEFAULT_REDUCER_STATUSES.FETCHED
       }
     case actionTypes.ACCOUNT_SIGN_IN_FAILED:
