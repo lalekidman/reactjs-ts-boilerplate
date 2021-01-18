@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.scss';
 
-import MainController from './controllers/main'
+import MainController from './components/main'
 
 import {Provider} from 'react-redux'
 import store from './store-redux';

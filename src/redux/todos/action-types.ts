@@ -1,3 +1,4 @@
 export const ADD_TODO_PENDING = 'ADD_TODO_PENDING'
 export const ADD_TODO_FAILED = 'ADD_TODO_FAILED'
 export const ADD_TODO_SUCCEED = 'ADD_TODO_SUCCEED'
+export const ADD_TODO = 'ADD_TODO'

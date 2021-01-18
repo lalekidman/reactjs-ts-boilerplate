@@ -1,19 +1,16 @@
 import * as actionTypes from './action-types'
 import { DEFAULT_REDUCER_STATUSES, } from '../../utils/constants'
 import { IAddTodoReducer, IAddTodoReducerState } from './interfaces'
+import {v4 as uuidV4} from 'uuid'
 const initialState:IAddTodoReducerState = {
-  data: {
-    _id: '',
-    content: '',
-    createdAt: 0,
-    updatedAt: 0,
-  },
+  data: [],
   status: DEFAULT_REDUCER_STATUSES.IDLE,
   error: null,
   retry: 0
 }
 export const addTodoReducer = (state = initialState, actions: IAddTodoReducer): IAddTodoReducerState => {
   const {type, payload, error} = actions
+  console.log('actions :>> ', actions);
   switch (type) {
     case actionTypes.ADD_TODO_PENDING:
       return {
@@ -32,6 +29,13 @@ export const addTodoReducer = (state = initialState, actions: IAddTodoReducer): 
         ...state,
         error,
         status: DEFAULT_REDUCER_STATUSES.FAILED
+      }
+    case actionTypes.ADD_TODO:
+      return {
+        ...state,
+        data: [...state.data, {...payload, createdAt: Date.now(), _id: uuidV4()}],
+        error,
+        status: DEFAULT_REDUCER_STATUSES.FETCHED
       }
     default:
       return state

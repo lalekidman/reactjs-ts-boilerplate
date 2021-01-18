@@ -11,5 +11,5 @@ export type ITodoEntity = ITodoData & {
   updatedAt: number
   createdAt: number
 }
-export type IAddTodoReducerState = IGeneralReducerState<ITodoEntity>
+export type IAddTodoReducerState = IGeneralReducerState<ITodoEntity[]>
 export type IAddTodoReducer = IGeneralReducer<typeof ActionTypes>
