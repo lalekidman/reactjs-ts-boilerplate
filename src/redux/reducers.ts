@@ -7,7 +7,7 @@ import {validateAuthenticationReducer} from './validate-authentication/reducer'
 export default combineReducers({
     addedTodo: addTodoReducer,
     authentication: signInAccountReducer,
-    // validateAuthentication: validateAuthenticationReducer,
+    auth: validateAuthenticationReducer,
 //   toast
 // implement here
 })
