@@ -3,6 +3,7 @@ import {Elements, CardElement, CardElementComponent, ElementsConsumer, useStripe
 import {loadStripe, StripeCardElement} from '@stripe/stripe-js';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Http from 'axios'
+import QueryString from 'query-string'
 const stripePK = process.env.REACT_APP_STRIPE_PUBLIC_KEY as string
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -10,32 +11,24 @@ const cardElementOptions = {
   hidePostalCode: true
 }
 const stripePromise = loadStripe(stripePK);
-const App = () => {
-  
+const App = (props: any) => {
   return (
     <Elements stripe={stripePromise}>
       <CheckoutForm
+        {...props}
       />
     </Elements>
   );
 };
-function CheckoutForm({}: any) {
+function CheckoutForm(props: any) {
   const [isPaymentLoading, setPaymentLoading] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [paymentForm, setPaymentForm] = useState(() => ({fullName: "", email: ""}))
   const stripe = useStripe();
   const elements = useElements();
-
-  const createPaymentIntents = async (params: any) => {
-    // create a payment intent on server side to generate a client token for verification of the payment.
-    // const {data} = await Http({
-    //   method: "POST",
-    //   baseURL: "http://localhost:3005",
-    //   url: "/api/stripe/payment-intent",
-    //   data: {
-    //     amount: 5 * 100
-    //   }
-    // })
+  const queryParams = QueryString.parse(props.location.search)
+  const createPaymentIntents = async ({}: any) => {
+    const keepCardDetails = false
     const cardElement = elements?.getElement(CardElement)
     // set the payment method, for this. by card.
     const {paymentMethod, error} = (await stripe?.createPaymentMethod({
@@ -51,28 +44,38 @@ function CheckoutForm({}: any) {
       baseURL: "http://localhost:3000",
       url: "/v1/products/purchase",
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWZlcmVuY2VJZCI6IjhlZjNkNjNmLWI0YWMtNGM4YS05MTJkLTI4NWQyZTEyMzg2MSIsInRva2VuVHlwZSI6IlNJR05fSU4iLCJpYXQiOjE2MTEzMTQ4MjEsImV4cCI6MTYxMTMyMjAyMX0.Fa4Rg6_ilsGbUTRLMIKGAlF_LhwaKIPerflNsTStT48`
+        Authorization: `Bearer ${queryParams.token}`
       },
       // url: "/api/stripe/customers",
       data: {
-        productId: "92dec9d5-bb9d-4502-a01e-f4ccc739eec0",
+        productId: queryParams.productId,
         // amount: 7 * 10 0,
         paymentMethodId: paymentMethod.id,
-        keepCardDetails: true
+        keepCardDetails
       }
     })
-    console.log('data :>> ', data);
-    const confirmedCardPayment = await stripe?.confirmCardPayment(data.result, {
-      payment_method: paymentMethod.id
-    })
-    console.log('confirmedCxxxxxxxxxxxxardPayment :>> ', confirmedCardPayment);
+    const {result} = data
+    if (!result.authenticated) {
+      const confirmedCardPayment = await stripe?.confirmCardPayment(result.payment.client_secret, {
+        payment_method: paymentMethod.id
+      })
+      console.log('confirmedCardPaymentconfirmedCardPaymentconfirmedCardPayment :>> ', confirmedCardPayment);
+    }
+    if (keepCardDetails) {
+      const confirmedCardSetup = await stripe?.confirmCardSetup(result.intentSecret.client_secret, {
+        payment_method: {
+          card: cardElement as StripeCardElement
+        }
+      })
+      console.log('confirmedCardSetupconfirmedCardSetupconfirmedCardSetup :>> ', confirmedCardSetup);
+    }
+    alert('Successfully purchase item')
     // console.log('paymentMethodReq >>> :>> ', source);
     // // confirming the card payment
     
     // console.log('confirmedCardPayment :>> ', confirmedCardPayment);
   }
   const handlePaymentFormSubmitButton = () => {
-    console.log('paymentForm :>> ', paymentForm);
     createPaymentIntents(paymentForm)
   }
   const handlePaymentForm = (params: any) => {

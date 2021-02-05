@@ -3,6 +3,7 @@ import {Elements, CardElement, CardElementComponent, ElementsConsumer, useStripe
 import {loadStripe, StripeCardElement} from '@stripe/stripe-js';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Http from 'axios'
+import QueryString from 'query-string'
 const stripePK = process.env.REACT_APP_STRIPE_PUBLIC_KEY as string
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -10,22 +11,23 @@ const cardElementOptions = {
   hidePostalCode: true
 }
 const stripePromise = loadStripe(stripePK);
-const App = () => {
+const App = (props: any) => {
   
   return (
     <Elements stripe={stripePromise}>
       <CheckoutForm
+      {...props}
       />
     </Elements>
   );
 };
-function CheckoutForm({}: any) {
+function CheckoutForm(props: any) {
   const [isPaymentLoading, setPaymentLoading] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [paymentForm, setPaymentForm] = useState(() => ({fullName: "", email: ""}))
   const stripe = useStripe();
   const elements = useElements();
-
+  const queryParams = QueryString.parse(props.location.search)
   const setupCustomerCard = async (params: any) => {
     // create a payment intent on server side to generate a client token for verification of the payment.
     try {
@@ -34,11 +36,11 @@ function CheckoutForm({}: any) {
       const {data} = await Http({
         method: "POST",
         baseURL: "http://localhost:3000",
-        url: "/v1/users/9d67fd5c-0266-43b4-a7fd-0efaa636a82a/settings/payments/set-up",
+        url: `/v1/users/${queryParams.userId}/settings/payment-card/set-up`,
         // url: "/api/stripe/customers/cus_InIAnE1ROn23dy/intent",
         data: {},
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWZlcmVuY2VJZCI6IjlkNjdmZDVjLTAyNjYtNDNiNC1hN2ZkLTBlZmFhNjM2YTgyYSIsInRva2VuVHlwZSI6IlNJR05fSU4iLCJpYXQiOjE2MTEzMDg3MTYsImV4cCI6MTYxMTMxNTkxNn0.NrcBdG4CdzBmyq3gHTaPJPNOTePH9NCE3I-cD76uGs4`
+          Authorization: `Bearer ${queryParams.token}`
         }
       })
       const confirmedCardPayment = await stripe?.confirmCardSetup(data.result, {
@@ -46,6 +48,7 @@ function CheckoutForm({}: any) {
           card: cardElement as StripeCardElement
         }
       })
+      alert('card detail saved.')
       console.log('confirmedCardPayment :>> ', confirmedCardPayment);
     } catch (error) {
       throw error
