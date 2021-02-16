@@ -31,17 +31,24 @@ function CheckoutForm(props: any) {
     const keepCardDetails = false
     const cardElement = elements?.getElement(CardElement)
     // set the payment method, for this. by card.
-    const {paymentMethod, error} = (await stripe?.createPaymentMethod({
-      type: "card",
-      card: cardElement as StripeCardElement,
-      billing_details: {
-        name: "Darryl Fabian",
-        email: "mailmail@mailnesia.com",
-      }
-    })) as any
+    // const {paymentMethod, error} = (await stripe?.createPaymentMethod({
+      // type: "card",
+      // card: cardElement as StripeCardElement,
+      // billing_details: {
+      //   name: "Darryl Fabian",
+      //   email: "mailmail@mailnesia.com",
+      // }
+    // })) as any
+    // if (error) {
+    //   alert(error.message)
+    //   return
+    // }
+    // console.log('paymentMethod :>> ', error);
+    // console.log('paymentMethod :>> ', paymentMethod);
     const {data} = await Http({
       method: "POST",
       baseURL: "http://localhost:3000",
+      // baseURL: "https://electronapi.westus.cloudapp.azure.com",
       url: "/v1/products/purchase",
       headers: {
         Authorization: `Bearer ${queryParams.token}`
@@ -50,16 +57,45 @@ function CheckoutForm(props: any) {
       data: {
         productId: queryParams.productId,
         // amount: 7 * 10 0,
-        paymentMethodId: paymentMethod.id,
+        // paymentMethodId: paymentMethod.id,
         keepCardDetails
       }
     })
     const {result} = data
-    if (!result.authenticated) {
-      const confirmedCardPayment = await stripe?.confirmCardPayment(result.payment.client_secret, {
-        payment_method: paymentMethod.id
-      })
-      console.log('confirmedCardPaymentconfirmedCardPaymentconfirmedCardPayment :>> ', confirmedCardPayment);
+    console.log('result :>> ', result);
+    console.log('====================================================================================================');
+    console.log('result.payment :>> ', result.payment);
+    const confirmedCardPaymentResponse = await stripe?.confirmCardPayment(result.payment.client_secret, {
+      payment_method: {
+        card: cardElement as StripeCardElement,
+        billing_details: {
+          name: "Darryl Fabian",
+          email: "mailmail@mailnesia.com",
+        }
+      }
+    })
+    console.log('paymenresult.paymentt :>> ', confirmedCardPaymentResponse);
+    try {
+      if (!result.authenticated) {
+        const payment = await stripe?.handleCardAction(result.payment.client_secret)
+        console.log('payment :>> ', payment);
+        // const confirmedCardPaymentResponse = await stripe?.confirmCardPayment(result.payment.client_secret, {
+        //   payment_method: paymentMethod.id
+        // })
+        // if (confirmedCardPaymentResponse) {
+        //   if (confirmedCardPaymentResponse.error) {
+        //     console.log('confirmedCardPaymentResponse :>> ', confirmedCardPaymentResponse.error);
+        //     // Handle error here
+        //   } else if (confirmedCardPaymentResponse.paymentIntent && confirmedCardPaymentResponse.paymentIntent.status === 'succeeded') {
+        //     // Handle successful payment here
+        //     alert('Successfully purchase item')
+        //   }
+        // }
+      } else {
+        alert('Successfully purchase item')
+      }
+    } catch (error) {
+      console.log('error :>> ', error);
     }
     if (keepCardDetails) {
       const confirmedCardSetup = await stripe?.confirmCardSetup(result.intentSecret.client_secret, {
@@ -69,10 +105,8 @@ function CheckoutForm(props: any) {
       })
       console.log('confirmedCardSetupconfirmedCardSetupconfirmedCardSetup :>> ', confirmedCardSetup);
     }
-    alert('Successfully purchase item')
     // console.log('paymentMethodReq >>> :>> ', source);
     // // confirming the card payment
-    
     // console.log('confirmedCardPayment :>> ', confirmedCardPayment);
   }
   const handlePaymentFormSubmitButton = () => {
