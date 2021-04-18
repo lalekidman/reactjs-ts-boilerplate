@@ -28,7 +28,7 @@ function CheckoutForm(props: any) {
   const elements = useElements();
   const queryParams = QueryString.parse(props.location.search)
   const createPaymentIntents = async ({}: any) => {
-    const keepCardDetails = false
+    const keepCardDetails = true
     const cardElement = elements?.getElement(CardElement)
     // set the payment method, for this. by card.
     // const {paymentMethod, error} = (await stripe?.createPaymentMethod({
@@ -68,10 +68,6 @@ function CheckoutForm(props: any) {
     const confirmedCardPaymentResponse = await stripe?.confirmCardPayment(result.payment.client_secret, {
       payment_method: {
         card: cardElement as StripeCardElement,
-        billing_details: {
-          name: "Darryl Fabian",
-          email: "mailmail@mailnesia.com",
-        }
       }
     })
     console.log('paymenresult.paymentt :>> ', confirmedCardPaymentResponse);
@@ -119,6 +115,7 @@ function CheckoutForm(props: any) {
     <>
     <Button onClick={() => setShowPaymentModal(true)}>Show Modal</Button>
       Hello world
+      <img src = 'https://electronapps.blob.core.windows.net/public-blob/fa929010-ad79-425a-89ac-b43aff7cf17f' alt='simple image' />
       <Modal
           show={showPaymentModal}
           onHide={() => setShowPaymentModal(false)}

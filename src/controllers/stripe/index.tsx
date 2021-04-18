@@ -16,6 +16,7 @@ const App = () => {
           <Route exact path='/' component={CheckOutComponent} />
           <Route exact path='/set-up' component={CardSetUpComponent} />
           <Route exact path='/saved-card' component={SaveCardCheckOutComponent} />
+          <Route exact path='/subscription' component={SaveCardCheckOutComponent} />
         </Switch>
       </Router>
     </>

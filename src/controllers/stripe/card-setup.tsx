@@ -45,7 +45,11 @@ function CheckoutForm(props: any) {
       })
       const confirmedCardPayment = await stripe?.confirmCardSetup(data.result, {
         payment_method: {
-          card: cardElement as StripeCardElement
+          card: cardElement as StripeCardElement,
+          billing_details: {
+            email: 'simple email',
+            name: 'simple name',
+          }
         }
       })
       alert('card detail saved.')
